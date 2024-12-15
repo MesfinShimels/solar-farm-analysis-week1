@@ -1,3 +1,7 @@
+myenv/
+*.csv
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -5,7 +9,8 @@ __pycache__/
 
 # C extensions
 *.so
-
+Data/
+Data/*.csv
 # Distribution / packaging
 .Python
 build/
