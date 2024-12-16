@@ -53,23 +53,42 @@ if __name__ == "__main__":
 
 
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-# def plot_time_series(data, x_col, y_col, title="Time Series Plot"):
-#     """Plots a time series."""
-#     plt.figure(figsize=(10, 6))
-#     plt.plot(data[x_col], data[y_col])
-#     plt.title(title)
-#     plt.xlabel(x_col)
-#     plt.ylabel(y_col)
-#     plt.grid()
-#     plt.show()
+def plot_close_price_with_moving_averages(df, file_name):
+    """
+    Plots the Close Price with Moving Averages (SMA 10, SMA 20).
+    """
+    plt.figure(figsize=(12, 6))
+    plt.plot(df.index, df['Close'], label="Close Price", color='blue')
+    plt.plot(df.index, df['SMA_10'], label="SMA 10", linestyle='--', color='red')
+    plt.plot(df.index, df['SMA_20'], label="SMA 20", linestyle='--', color='green')
+    plt.title(f"{file_name} - Close Price with Moving Averages")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.legend()
+    plt.show()
 
-# def plot_histogram(data, column, title="Histogram"):
-#     """Plots a histogram for a specific column."""
-#     plt.figure(figsize=(8, 5))
-#     data[column].hist(bins=30)
-#     plt.title(title)
-#     plt.xlabel(column)
-#     plt.ylabel("Frequency")
-#     plt.show()
+def plot_rsi(df, file_name):
+    """
+    Plots the Relative Strength Index (RSI) indicator.
+    """
+    plt.figure(figsize=(12, 4))
+    plt.plot(df.index, df['RSI'], color='purple', label='RSI')
+    plt.axhline(70, color='red', linestyle='--', label='Overbought (70)')
+    plt.axhline(30, color='green', linestyle='--', label='Oversold (30)')
+    plt.title(f"{file_name} - Relative Strength Index (RSI)")
+    plt.legend()
+    plt.show()
+
+def plot_macd(df, file_name):
+    """
+    Plots the MACD indicator, Signal line, and Histogram.
+    """
+    plt.figure(figsize=(12, 5))
+    plt.plot(df.index, df['MACD'], label='MACD', color='orange')
+    plt.plot(df.index, df['MACD_signal'], label='MACD Signal', linestyle='--', color='blue')
+    plt.bar(df.index, df['MACD_hist'], label='MACD Histogram', color='gray')
+    plt.title(f"{file_name} - MACD")
+    plt.legend()
+    plt.show()
