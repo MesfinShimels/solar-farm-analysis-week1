@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import matplotlib.pyplot as plt
 # Function to plot publication trends over time
 def plot_publication_trends(publication_counts):
     """
@@ -17,21 +17,6 @@ def plot_publication_trends(publication_counts):
     plt.grid(True)
     plt.show()
 
-# Function to plot sentiment distribution
-def plot_sentiment_distribution(data, column='sentiment'):
-    """
-    Plot the distribution of sentiment scores.
-    
-    Args:
-    - data: A pandas DataFrame containing the sentiment data.
-    - column: The column name containing sentiment scores.
-    """
-    plt.figure(figsize=(10, 6))
-    sns.histplot(data[column], bins=30, kde=True, color='orange')
-    plt.title('Sentiment Distribution')
-    plt.xlabel('Sentiment Score')
-    plt.ylabel('Frequency')
-    plt.show()
 
 # Example of calling the functions with a sample dataset
 if __name__ == "__main__":
@@ -53,7 +38,7 @@ if __name__ == "__main__":
 
 
 
-import matplotlib.pyplot as plt
+
 
 def plot_close_price_with_moving_averages(df, file_name):
     """
@@ -68,6 +53,8 @@ def plot_close_price_with_moving_averages(df, file_name):
     plt.ylabel("Price")
     plt.legend()
     plt.show()
+
+
 
 def plot_rsi(df, file_name):
     """
@@ -92,3 +79,53 @@ def plot_macd(df, file_name):
     plt.title(f"{file_name} - MACD")
     plt.legend()
     plt.show()
+
+
+
+
+
+
+
+
+
+def plot_sentiment_vs_stock(merged_df):
+    """
+    Plots the relationship between sentiment and stock returns.
+    
+    Args:
+    - merged_df (DataFrame): Merged DataFrame containing 'Sentiment' and 'Stock_Return'.
+    """
+    plt.figure(figsize=(15,15))
+    plt.scatter(merged_df['Sentiment'], merged_df['Stock_Return'], alpha=0.5)
+    plt.title("Sentiment vs Stock Returns")
+    plt.xlabel("Sentiment")
+    plt.ylabel("Stock Return (%)")
+    plt.show()
+
+
+
+# Plot sentiment distribution function
+def plot_sentiment_distribution(news_df):
+    """
+    Plots a histogram of sentiment scores for the given DataFrame.
+    
+    Args:
+    - news_df (DataFrame): DataFrame containing a 'Sentiment' column.
+    """
+    try:
+        if 'Sentiment' not in news_df.columns or news_df.empty:
+            print("No sentiment data available to plot.")
+            return
+
+        # Plot histogram of sentiment scores
+        plt.figure(figsize=(10, 6))
+        plt.hist(news_df['Sentiment'], bins=20, color='skyblue', edgecolor='black')
+        plt.title("Sentiment Distribution", fontsize=16)
+        plt.xlabel("Sentiment Score", fontsize=14)
+        plt.ylabel("Frequency", fontsize=14)
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.show()
+        print("Sentiment distribution plot displayed.")
+    except Exception as e:
+        print(f"Error plotting sentiment distribution: {e}")
+        raise
