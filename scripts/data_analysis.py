@@ -2,7 +2,8 @@ import pandas as pd
 from textblob import TextBlob
 from collections import Counter
 import re
-
+from talib import SMA, RSI, MACD
+from scipy.stats import pearsonr
 
 # Descriptive Statistics
 def calculate_text_lengths(data, column='headline'):
@@ -19,11 +20,7 @@ def publication_trends(data, column='date'):
     data['date'] = pd.to_datetime(data[column])
     return data.groupby(data['date'].dt.date).size()
 
-# Text Analysis
-def sentiment_analysis(data, column='headline'):
-    """Perform sentiment analysis using TextBlob."""
-    data['sentiment'] = data[column].apply(lambda x: TextBlob(x).sentiment.polarity)
-    return data
+
 
 def extract_keywords(data, column='headline', n=10):
     """Extract common keywords from the text."""
@@ -33,8 +30,8 @@ def extract_keywords(data, column='headline', n=10):
 
 
 # data_analysis.py
-import pandas as pd
-from talib import SMA, RSI, MACD
+
+
 
 def calculate_technical_indicators(df):
     """
@@ -65,3 +62,95 @@ def calculate_technical_indicators(df):
     df["MACD_hist"] = macd_hist
 
     return df
+
+
+
+
+
+def prepare_data(news_df, stock_df):
+    """
+    Prepares and aligns news and stock price data by date.
+    
+    Args:
+    - news_df (DataFrame): News data with 'date' and 'Sentiment' columns.
+    - stock_df (DataFrame): Stock price data with 'Date' and 'Close' columns.
+    
+    Returns:
+    - DataFrame: Merged DataFrame with daily returns and sentiment scores.
+    """
+    try:
+        # Standardize the 'date' columns to ISO 8601 format
+        news_df['date'] = pd.to_datetime(news_df['date'], errors='coerce', format='%Y-%m-%d').dt.date
+        stock_df['Date'] = pd.to_datetime(stock_df['Date'], errors='coerce', format='%Y-%m-%d').dt.date
+
+        # Remove rows with invalid dates (optional)
+        news_df = news_df.dropna(subset=['date'])
+        stock_df = stock_df.dropna(subset=['Date'])
+
+        # Merge DataFrames on the standardized date
+        print("Merging stock and news data...")
+        merged_df = pd.merge(stock_df, news_df[['date', 'Sentiment']], how='left', left_on='Date', right_on='date')
+
+        # Calculate daily returns for stock prices
+        merged_df['Stock_Return'] = merged_df['Close'].pct_change() * 100
+        print("Merge complete. First 5 rows:")
+        print(merged_df.head())
+
+        return merged_df
+
+    except Exception as e:
+        print(f"Error preparing data: {e}")
+        return None
+
+
+
+def sentiment_analysis(news_df):
+    """
+    Analyzes sentiment of news headlines and adds a 'Sentiment' column.
+    
+    Args:
+    - news_df: DataFrame containing news data with a 'headline' column.
+    
+    Returns:
+    - news_df: DataFrame with an added 'Sentiment' column.
+    """
+    try:
+        # Perform basic sentiment analysis
+        news_df['Sentiment'] = news_df['headline'].apply(
+            lambda x: 1 if 'positive' in x.lower() else -1 if 'negative' in x.lower() else 0
+        )
+    except KeyError as e:
+        raise KeyError(f"Missing required column in news_df: {e}")
+    
+    # Debug: Check the first few rows
+    print("First 5 rows of news_df with Sentiment:")
+    print(news_df[['headline', 'Sentiment']].head())
+    
+    return news_df
+
+
+
+
+def calculate_correlation(merged_df):
+    """
+    Calculates the correlation between sentiment and stock returns.
+    
+    Args:
+    - merged_df (DataFrame): Merged DataFrame containing 'Sentiment' and 'Stock_Return'.
+    
+    Returns:
+    - float: Correlation value.
+    """
+    correlation = merged_df[['Sentiment', 'Stock_Return']].corr().iloc[0, 1]
+    return correlation
+
+
+
+
+
+
+
+
+
+
+

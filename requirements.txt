@@ -1,8 +1,42 @@
-pandas>=2.0.0
-numpy>=1.24.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-scikit-learn>=1.2.0
-jupyter>=1.0.0
-pytest>=7.0.0
-pylance
+
+Install the following Python libraries:
+•	pandas>=2.0.0
+•	numpy>=1.24.0
+•	matplotlib>=3.7.0
+•	seaborn>=0.12.0
+•	scikit-learn>=1.2.0
+•	nltk>=3.8.0
+•	vaderSentiment>=3.3.2
+•	jupyter>=1.0.0
+•	pytest>=7.0.0
+•	TA-Lib>=0.4.0
+Install all dependencies using:
+pip install -r requirements.txt
+
+TA-Lib Installation Guide
+For Ubuntu:
+1.	Install required libraries: 
+2.	sudo apt-get update
+3.	sudo apt-get install -y build-essential wget
+4.	Download and build TA-Lib: 
+5.	wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+6.	tar -xvzf ta-lib-0.4.0-src.tar.gz
+7.	cd ta-lib
+8.	./configure --prefix=/usr
+9.	make
+10.	sudo make install
+11.	Install the Python wrapper: 
+12.	source venv/bin/activate
+13.	pip install TA-Lib
+14.	Verify installation: 
+15.	import talib
+16.	print(talib.get_functions())
+For Windows:
+1.	Download the appropriate TA-Lib .whl file based on your Python version from cgohlke/talib-build.
+2.	Activate your virtual environment: 
+3.	env\Scripts\activate
+4.	Install the .whl file: 
+5.	pip install <path_to_downloaded_file>
+6.	Verify installation: 
+7.	import talib
+8.	print(talib.get_functions())
